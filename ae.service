@@ -12,7 +12,6 @@ WorkingDirectory=/home
 ExecStart=/usr/bin/python /root/code/python/client.py start
 ExecStop=/usr/bin/python /root/code/python/client.py stop
 ExecReload=/usr/bin/python /root/code/python/client.py restart
-ExecRestart=/usr/bin/python /root/code/python/client.py restart
 Restart=always
 RestartSec=30
 

@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-import socket,sys,commands,json,re,time,signal,ConfigParser
-sys.path.append('/root/code/python')
+import socket,sys,commands,json,re,time,signal,ConfigParser,os
+is_exit = 0
+aepath = '/root/code/aiui_devops'
+sys.path.append(aepath)
 from ae_service import *
 pid = AEpid()
-is_exit = 0
 
 
 def getData():
@@ -38,6 +39,13 @@ def start():
         log('debug','Failed to conenct server %s from %s as reason %s' % (remote_ip_port,local_ip_port,str(e)))
         sys.exit(1)
     while True:
+        try:
+            data = sk.recv(1024)
+            print data
+            if data == 'exit':
+                is_exit = '1'
+        except:
+            pass
         data0 = json.dumps(getData())
         sk.sendall(data0)
         time.sleep(1)
@@ -53,8 +61,7 @@ def stop():
     time.sleep(2)
     pid.remove(pid_file)
     print 'Done!'
-
-    
+   
     
 signal.signal(signal.SIGALRM, signal_handler)
 try:
