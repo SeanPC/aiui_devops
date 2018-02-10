@@ -27,7 +27,7 @@ def Readconfig(section,key=None):
         return CONFIG.get(section,key)
 
 def log(level,message):
-    if Readconfig('logger','debug') == 'yes' and level != 'debug':
+    if debug == 'yes' and level != 'debug':
         return
     mylog = getattr(logging,level)
     mylog(message)
@@ -45,7 +45,8 @@ class AEpid(object):
 def usage():
     print "Usage:client.py {start|stop|restart|status}"
 
-if Readconfig('logger','debug') == 'yes':
+debug = Readconfig('logger','debug')
+if debug == 'yes':
     logging.basicConfig(level=logging.DEBUG,
             format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
             datefmt='%a, %d %b %Y %H:%M:%S',
