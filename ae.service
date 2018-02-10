@@ -1,0 +1,17 @@
+[Unit]
+Description=AE deamon
+After=rc-local.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home
+ExecStart=/usr/bin/python /root/code/python/client.py start
+ExecStop=/usr/bin/python /root/code/python/client.py stop
+ExecReload=/usr/bin/python /root/code/python/client.py restart
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
