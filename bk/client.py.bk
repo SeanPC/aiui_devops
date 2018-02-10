@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+import socket,sys,commands,json,re,time,signal
+from ae_init import *
+from ae_misc import *
+misc=Misc()
+is_exit = 1
+
+
+def getData():
+    hostname = socket.gethostname()
+    rc,out = commands.getstatusoutput('ifconfig -a')
+    for i in out.split('\n\n'):
+        if '192.168' in i:
+            ip = re.findall(r'inet (.+?) ',i)[0]
+            return {"hostname":hostname,"ip":ip}
+def signal_handler(signum, frame):
+    global is_exit
+    print('Received signal: going to exit!', signum)
+    is_exit = 1
+    
+signal.signal(signal.SIGALRM, signal_handler)
+if misc.Readconfig(CONFIG,'agent','agent') == 'yes':
+    section = 'agent'
+else:
+    section = 'server'
+remote_ip_port = (misc.Readconfig(CONFIG,section,'host'),int(misc.Readconfig(CONFIG,section,'port')))
+local_ip_port = ("127.0.0.1",int(misc.Readconfig(CONFIG,'client','port')))
+
+sk = socket.socket()
+sk.bind(local_ip_port)
+sk.connect(remote_ip_port)
+while True:
+    data = sk.recv(1024)
+    print 'receive:',data
+    time.sleep(1)
+    print is_exit
+    data0 = json.dumps(getData())
+    sk.sendall(data0)
+    time.sleep(1)
+    inp = raw_input('please input:')
+    if is_exit == 1:
+        break
+sk.close()
