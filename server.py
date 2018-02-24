@@ -1,24 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import SocketServer,signal,time
+import SocketServer,signal,time,socket
 import sys
 class MyServer(SocketServer.BaseRequestHandler):
     def handle(self):
-        conn = self.request
-        client = str(conn.getpeername())
+        down_sk = self.request
+        up_sk = socket.socket()
+        remote_ip_port = ('192.168.164.21',8009)
+        up_sk.connect(remote_ip_port)
+        client = down_sk.getpeername()[0]
         while True:
             if client_exit == 1:
-                conn.sendall('yes')
+                down_sk.sendall('yes')
             elif client_exit == 2:
-                conn.close()
+                down_sk.close()
             else:
-                conn.sendall('no')
-            data = conn.recv(1024)
-            print client + ' : ' + data
+                down_sk.sendall('no')
+            
+            data = down_sk.recv(1024)
+            #data = client + ' : ' + data
+            print data
+            up_sk.sendall(data)
             if data == 'exit':
                 print 'Client %s is leaving' % client
                 break
-        conn.close()
+        up_sk.close()
+        down_sk.close()
+
+
+#main code
         
 client_exit = 0
 server = SocketServer.ThreadingTCPServer(('0.0.0.0',8002),MyServer)
@@ -29,5 +39,5 @@ except KeyboardInterrupt:
 finally:
     client_exit = 1
     time.sleep(5)
-    #need check if exist client, and close them by set client_exit = 2
+    #need check if client exist, and close them by set client_exit = 2
     server.server_close()

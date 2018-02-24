@@ -56,7 +56,10 @@ def stop():
     time.sleep(2)
     pid.remove(pid_file)
     print 'Done!'
-   
+
+
+###main code
+    
 is_exit = 0   
 signal.signal(signal.SIGALRM, signal_handler)
 try:
