@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import SocketServer,signal,time,socket
-import sys
+import SocketServer,signal,time,socket,sys
+
 class MyServer(SocketServer.BaseRequestHandler):
     def handle(self):
         down_sk = self.request
@@ -13,10 +13,9 @@ class MyServer(SocketServer.BaseRequestHandler):
             if client_exit == 1:
                 down_sk.sendall('yes')
             elif client_exit == 2:
-                down_sk.close()
+                break
             else:
                 down_sk.sendall('no')
-            
             data = down_sk.recv(1024)
             #data = client + ' : ' + data
             print data
@@ -24,6 +23,8 @@ class MyServer(SocketServer.BaseRequestHandler):
             if data == 'exit':
                 print 'Client %s is leaving' % client
                 break
+        up_sk.sendall('exit')
+        time.sleep(0.5)
         up_sk.close()
         down_sk.close()
 
