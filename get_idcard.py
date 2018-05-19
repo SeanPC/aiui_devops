@@ -17,7 +17,7 @@ def gen_excel():
 #user_order_list;user_bind_info;user_recv_address;ticket_order_product_list
     #import pdb;pdb.set_trace()
     #mysql basic info
-    dbhost = 'rm-2ze2679z58k5p87ze.mysql.rds.aliyuncs.com'
+    dbhost = ''
     dbuser = 'ooofans'
     dbpassword = '3aG92f20S2owf8M2'
     db = 'ticketdb'    
