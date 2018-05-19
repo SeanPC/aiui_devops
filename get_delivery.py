@@ -4,7 +4,7 @@ import MySQLdb,re,xlwt,sys,time
 
 def init_mysql():
     global sqlconnect,cursor
-    dbhost = 'rm-2ze2679z58k5p87ze.mysql.rds.aliyuncs.com'
+    dbhost = ''
     dbuser = 'ooofans'
     dbpassword = '3aG92f20S2owf8M2'
     db = 'ticketdb'  
